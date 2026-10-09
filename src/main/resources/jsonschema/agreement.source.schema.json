@@ -26,9 +26,7 @@
     "currency",
     "creditInterest",
     "accrualInterest",
-    "feeCharge",
-    "op",
-    "batchId"
+    "feeCharge"
   ],
   "properties": {
     "agmtId": {
@@ -58,6 +56,13 @@
     },
     "agmtTypeCd": {
       "description": "Type d'agreement.",
+      "type": "string",
+      "enum": [
+        "LOAN",
+        "LINE_OF_CREDIT",
+        "GUARANTY_LETTER"
+      ],
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.AgreementType"
       "type": "string"
     },
     "party": {
