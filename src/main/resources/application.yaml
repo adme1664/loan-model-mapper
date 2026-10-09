@@ -1,0 +1,5 @@
+spring.application.name:
+  loan-model-mapper
+sqs.queue:
+    agreement:
+        name: 3857-unbk-agreement-infos-queue.fifo

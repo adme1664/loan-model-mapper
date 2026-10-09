@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unbnk.example/schemas/balance.schema.json",
+  "title": "Balance",
+  "description": "Un enregistrement du fichier UNBNK_BALANCE_DG_AAAAMMJJ_DT_AAAAMMJJ.json (le fichier est un tableau de ces objets).",
+  "type": "object",
+  "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.BaseSource",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "op",
+    "changeTs",
+    "businessDt",
+    "batchId",
+    "sourceSystem"
+  ],
+  "properties": {
+    "op": {
+      "description": "Type de changement : I (création), U (modification), D (suppression).",
+      "type": "string",
+      "enum": [
+        "I",
+        "U",
+        "D"
+      ],
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.Operation"
+    },
+    "id": {
+      "description": "Agreement ID",
+      "type": "string"
+    },
+    "changeTs": {
+      "description": "Horodatage UTC du changement dans le système source.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "businessDt": {
+      "description": "Date d'affaires du lot ; égale à la DG du nom de fichier.",
+      "type": "string",
+      "format": "date"
+    },
+    "batchId": {
+      "description": "Identifiant du lot, par exemple 20261005-01.",
+      "type": "string"
+    },
+    "sourceSystem": {
+      "description": "Système d'origine.",
+      "type": "string"
+    }
+  }
+}
