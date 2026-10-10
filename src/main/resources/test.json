@@ -1,0 +1,130 @@
+{
+  "Data": {
+    "version": "1.0",
+    "Balance": [
+      {
+        "x-unbnk-finance-details": {
+          "borrowingAgmtBal": {
+            "borrowingAgmtId": "1000",
+            "creditFacilityBal": [
+              {
+                "creditFacilityId": "06100001",
+                "currency": "CAD",
+                "globalOriginalCommitmentAmt": 500000.0,
+                "globalCurrentCommitmentAmt": 500000.0,
+                "bankGrossCommitmentAmt": 500000.0,
+                "bankNetCommitmentAmt": 500000.0,
+                "bankGrossCurrentUseAmt": 230000.0,
+                "bankNetCurrentUseAmt": 230000.0,
+                "bankGrossResidualAmt": 270000.0,
+                "bankNetResidualAmt": 270000.0,
+                "ourSyndicationDetentionPct": 100,
+                "creditFacilityParticipantBal": [],
+                "agmtBal": [
+                  {
+                    "agmtId": "0010200001",
+                    "currency": "CAD",
+                    "fxRate": 1.0,
+                    "globalOriginalAgmtAmt": 300000.0,
+                    "globalCurrentAgmtAmt": 180000.0,
+                    "bankGrossAgmtAmt": 180000.0,
+                    "bankNetAgmtAmt": 180000.0,
+                    "participantAgmtAmt": 0.0,
+                    "ourSyndicationDetentionPct": 100,
+                    "previousAgmtBal": null
+                  },
+                  {
+                    "agmtId": "0010200002",
+                    "currency": "CAD",
+                    "fxRate": 1.0,
+                    "globalOriginalAgmtAmt": 50000.0,
+                    "globalCurrentAgmtAmt": 50000.0,
+                    "bankGrossAgmtAmt": 50000.0,
+                    "bankNetAgmtAmt": 50000.0,
+                    "participantAgmtAmt": 0.0,
+                    "ourSyndicationDetentionPct": 100,
+                    "previousAgmtBal": null
+                  }
+                ]
+              },
+              {
+                "creditFacilityId": "06100002",
+                "currency": "CAD",
+                "globalOriginalCommitmentAmt": 1200000.0,
+                "globalCurrentCommitmentAmt": 1200000.0,
+                "bankGrossCommitmentAmt": 1200000.0,
+                "bankNetCommitmentAmt": 1200000.0,
+                "bankGrossCurrentUseAmt": 1200000.0,
+                "bankNetCurrentUseAmt": 1200000.0,
+                "bankGrossResidualAmt": 0.0,
+                "bankNetResidualAmt": 0.0,
+                "ourSyndicationDetentionPct": 100,
+                "creditFacilityParticipantBal": [],
+                "agmtBal": [
+                  {
+                    "agmtId": "0010200003",
+                    "currency": "CAD",
+                    "fxRate": 1.0,
+                    "globalOriginalAgmtAmt": 1200000.0,
+                    "globalCurrentAgmtAmt": 1200000.0,
+                    "bankGrossAgmtAmt": 1200000.0,
+                    "bankNetAgmtAmt": 1200000.0,
+                    "participantAgmtAmt": 0.0,
+                    "ourSyndicationDetentionPct": 100,
+                    "previousAgmtBal": null
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "op": "U",
+        "changeTs": "2026-10-05T23:30:00Z",
+        "businessDt": "2026-10-05",
+        "batchId": "20261005-01",
+        "sourceSystem": "LOANSYS",
+        "x-unbnk-finance-details": {
+          "borrowingAgmtBal": {
+            "borrowingAgmtId": "2000",
+            "creditFacilityBal": [
+              {
+                "creditFacilityId": "06200001",
+                "currency": "CAD",
+                "globalOriginalCommitmentAmt": 750000.0,
+                "globalCurrentCommitmentAmt": 375000.0,
+                "bankGrossCommitmentAmt": 375000.0,
+                "bankNetCommitmentAmt": 375000.0,
+                "bankGrossCurrentUseAmt": 375000.0,
+                "bankNetCurrentUseAmt": 375000.0,
+                "bankGrossResidualAmt": 0.0,
+                "bankNetResidualAmt": 0.0,
+                "ourSyndicationDetentionPct": 100,
+                "creditFacilityParticipantBal": [],
+                "agmtBal": [
+                  {
+                    "agmtId": "0010300001",
+                    "currency": "CAD",
+                    "fxRate": 1.0,
+                    "globalOriginalAgmtAmt": 750000.0,
+                    "globalCurrentAgmtAmt": 375000.0,
+                    "bankGrossAgmtAmt": 375000.0,
+                    "bankNetAgmtAmt": 375000.0,
+                    "participantAgmtAmt": 0.0,
+                    "ourSyndicationDetentionPct": 100,
+                    "previousAgmtBal": {
+                      "bankGrossAgmtAmt": 387500.0,
+                      "bankNetAgmtAmt": 387500.0,
+                      "ourSyndicationDetentionPct": 100
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

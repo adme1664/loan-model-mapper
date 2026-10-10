@@ -1,4 +1,4 @@
-package com.adme.learning.loan.model.mapper.agreement.boundary;
+package com.adme.learning.loan.model.mapper.agreement.control;
 
 import com.adme.learning.loan.model.mapper.agreement.entity.BaseSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,21 +7,21 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MessageParsing {
+public class ParsingMessage {
 
   private final ObjectMapper objectMapper;
 
-  public MessageParsing() {
+  public ParsingMessage() {
     this.objectMapper = new ObjectMapper();
   }
 
-  public <T> List<T> parseMessage(String message, Class<? extends BaseSource> clazz) {
+  public <T>  List<T> parseMessage(String message, Class<? extends BaseSource> clazz) {
     if (message == null || message.isEmpty()) {
       throw new IllegalArgumentException("Message cannot be null or empty");
     }
     try {
-      return objectMapper.readValue(message,
-          objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
+      return (List<T>) parseMessage(objectMapper.readValue(message,
+          objectMapper.getTypeFactory().constructCollectionType(List.class, clazz)));
     } catch (Exception e) {
       throw new IllegalArgumentException("Failed to parse message", e);
     }
@@ -37,8 +37,14 @@ public class MessageParsing {
     List<BaseSource> endSources = new ArrayList<>();
 
     sources.forEach(source -> {
-
+      if (source.getId().startsWith("END")) {
+        endSources.add(source);
+      } else {
+        regularSources.add(source);
+      }
     });
+
+    regularSources.addAll(endSources);
 
     return regularSources;
   }

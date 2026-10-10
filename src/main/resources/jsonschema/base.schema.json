@@ -8,6 +8,7 @@
   "additionalProperties": false,
   "required": [
     "id",
+    "eventName",
     "op",
     "changeTs",
     "businessDt",
@@ -24,6 +25,10 @@
         "D"
       ],
       "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.Operation"
+    },
+    "eventName": {
+      "description": "Nom de l'événement.",
+      "type": "string"
     },
     "id": {
       "description": "Agreement ID",
