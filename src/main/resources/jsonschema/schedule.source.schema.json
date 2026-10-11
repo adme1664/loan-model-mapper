@@ -10,12 +10,11 @@
     "$ref": "base.schema.json"
   },
   "required": [
-    "creditFacilityId",
-    "schedulesInfo",
-    "agreements"
+    "agmtId",
+    "schedulesInfo"
   ],
   "properties": {
-    "creditFacilityId": {
+    "agmtId": {
       "description": "Identifiant parent : la credit facility (clé).",
       "type": "string"
     },
@@ -25,13 +24,6 @@
       "items": {
         "$ref": "#/definitions/scheduleInfo"
       }
-    },
-    "agreements": {
-      "description": "Agreements de la facility et leurs échéanciers.",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/scheduleAgreement"
-      }
     }
   },
   "definitions": {
@@ -40,6 +32,9 @@
       "type": "object",
       "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.ScheduleInfo",
       "additionalProperties": false,
+      "extends": {
+        "$ref": "base.schema.json"
+      },
       "required": [
         "repymtTypeCd",
         "repymtFrequencyTypeCd",
@@ -134,6 +129,9 @@
       "type": "object",
       "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.ScheduleAgreement",
       "additionalProperties": false,
+      "extends": {
+        "$ref": "base.schema.json"
+      },
       "required": [
         "agmtId",
         "schedulesInfo"

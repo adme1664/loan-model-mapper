@@ -2,6 +2,10 @@ server.port: 9090
 logging.level.io.awspring.cloud: info
 aws.region: ca-central-1
 
+spring:
+  mongodb:
+    uri: mongodb://admin:bigdata@localhost:27017/bigdata?authSource=admin
+
 agreement:
   api:
     base-url: http://localhost:9091

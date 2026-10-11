@@ -10,78 +10,74 @@
     "$ref": "base.schema.json"
   },
   "required": [
-    "agmtBal"
+    "agmtId",
+    "currency",
+    "fxRate",
+    "globalOriginalAgmtAmt",
+    "globalCurrentAgmtAmt",
+    "bankGrossAgmtAmt",
+    "bankNetAgmtAmt",
+    "participantAgmtAmt",
+    "ourSyndicationDetentionPct",
+    "previousAgmtBal"
   ],
   "properties": {
-    "agmtBal": {
-      "description": "Soldes d'un agreement.",
-      "type": "object",
-      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.AgmtBal",
-      "additionalProperties": false,
-      "required": [
-        "agmtId",
-        "currency",
-        "fxRate",
-        "globalOriginalAgmtAmt",
-        "globalCurrentAgmtAmt",
-        "bankGrossAgmtAmt",
-        "bankNetAgmtAmt",
-        "participantAgmtAmt",
-        "ourSyndicationDetentionPct"
-      ],
-      "properties": {
-        "agmtId": {
-          "description": "Renvoie vers le fichier AGREEMENT (clé).",
-          "type": "string"
-        },
-        "currency": {
-          "description": "Devise de l'agreement.",
-          "type": "string"
-        },
-        "fxRate": {
-          "description": "Taux de conversion vers la devise de la facility.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "exclusiveMinimum": 0
-        },
-        "globalOriginalAgmtAmt": {
-          "description": "Montant initial total.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "minimum": 0
-        },
-        "globalCurrentAgmtAmt": {
-          "description": "Montant total actuel.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "minimum": 0
-        },
-        "bankGrossAgmtAmt": {
-          "description": "Part brute de la banque.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "minimum": 0
-        },
-        "bankNetAgmtAmt": {
-          "description": "Part nette de la banque.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "minimum": 0
-        },
-        "participantAgmtAmt": {
-          "description": "Part cédée aux participants.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "minimum": 0
-        },
-        "ourSyndicationDetentionPct": {
-          "description": "Pourcentage détenu par la banque.",
-          "type": "number",
-          "existingJavaType": "java.math.BigDecimal",
-          "minimum": 0,
-          "maximum": 100
-        }
-      }
+    "agmtId": {
+      "description": "Renvoie vers le fichier AGREEMENT (clé).",
+      "type": "string"
+    },
+    "currency": {
+      "description": "Devise de l'agreement.",
+      "type": "string"
+    },
+    "fxRate": {
+      "description": "Taux de conversion vers la devise de la facility.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "exclusiveMinimum": 0
+    },
+    "globalOriginalAgmtAmt": {
+      "description": "Montant initial total.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "globalCurrentAgmtAmt": {
+      "description": "Montant total actuel.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "bankGrossAgmtAmt": {
+      "description": "Part brute de la banque.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "bankNetAgmtAmt": {
+      "description": "Part nette de la banque.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "participantAgmtAmt": {
+      "description": "Part cédée aux participants.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "previousAgmtBal": {
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "ourSyndicationDetentionPct": {
+      "description": "Pourcentage détenu par la banque.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0,
+      "maximum": 100
     }
   }
 }
+

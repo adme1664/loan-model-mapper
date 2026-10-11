@@ -16,19 +16,6 @@ public class ParsingMessage {
 
   public ParsingMessage() {
     this.objectMapper = new ObjectMapper();
-
-//    // Configure for lenient parsing
-//    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//    objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-//    objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
-//    objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false);
-//    objectMapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
-//    objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-//
-//    // Register JSR-310 module for modern date/time types
-//    objectMapper.registerModule(new JavaTimeModule());
-//    objectMapper.findAndRegisterModules();
-
   }
 
   public <T>  List<T> parseMessage(String message, Class<? extends BaseSource> clazz)

@@ -26,7 +26,9 @@
     "currency",
     "creditInterest",
     "accrualInterest",
-    "feeCharge"
+    "feeCharge",
+    "op",
+    "batchId"
   ],
   "properties": {
     "agmtId": {
@@ -36,6 +38,19 @@
     "agmtInternalId": {
       "description": "Identifiant interne dans le système source.",
       "type": "string"
+    },
+    "op": {
+      "type": "string",
+      "description": "Opération à effectuer."
+    },
+    "batchId": {
+      "type": "string",
+      "description": "Identifiant du lot."
+    },
+    "businessDt": {
+      "description": "Date d'affaires du lot ; égale à la DG du nom de fichier.",
+      "type": "string"
+
     },
     "creditFacilityId": {
       "description": "Clé étrangère vers la credit facility du fichier DEAL.",

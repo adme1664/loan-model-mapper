@@ -1,9 +1,12 @@
 spring.application.name:
   loan-model-mapper
 sqs.queue:
-    agreement:
-        name: 3857-unbk-agreement-infos-queue.fifo
+  agreement: 3857-unbk-agreement-infos-queue.fifo
+  balance: 3857-unbk-balance-infos-queue.fifo
+  schedule: 3857-unbk-schedule-infos-queue.fifo
 
 agreement:
   api:
     base-url: http://localhost:8080
+logging:
+  include-application-name: true

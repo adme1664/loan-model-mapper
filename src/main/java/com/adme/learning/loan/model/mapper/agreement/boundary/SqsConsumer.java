@@ -1,9 +1,9 @@
 package com.adme.learning.loan.model.mapper.agreement.boundary;
 
-import com.adme.learning.loan.model.mapper.agreement.control.AgreementBundleContext;
 import com.adme.learning.loan.model.mapper.agreement.control.ParsingMessage;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
-import com.adme.learning.model.generator.AgreementBundleDTO;
+import com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource;
+import com.adme.learning.loan.model.mapper.agreement.entity.ScheduleSource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import java.util.List;
@@ -15,18 +15,30 @@ import org.springframework.stereotype.Service;
 public class SqsConsumer {
 
   private final ParsingMessage parsingMessage;
-  private final ProcessingAgreement processingAgreement;
+  private final AgreementPersistence agreementPersistence;
+  private final BalancePersistence balancePersistence;
+  private final AgreementSchedulePersistence schedulePersistence;
 
-  public SqsConsumer(ParsingMessage parsingMessage, ProcessingAgreement processingAgreement) {
+  private static final String ERROR_MESSAGE_PROCESSING = "Error occurred while processing {} source: {}";
+  private static final String ERROR_MESSAGE_PARSING = "Error occurred while parsing {} source: {}";
+  private static final String SUCCESS_MESSAGE_PROCESSING = "Successfully processed {} with ID={} source: {}";
+
+  public SqsConsumer(ParsingMessage parsingMessage,
+      AgreementPersistence agreementPersistence, BalancePersistence balancePersistence,
+      AgreementSchedulePersistence schedulePersistence) {
     this.parsingMessage = parsingMessage;
-    this.processingAgreement = processingAgreement;
+    this.agreementPersistence = agreementPersistence;
+    this.balancePersistence = balancePersistence;
+    this.schedulePersistence = schedulePersistence;
   }
 
-  @SqsListener(value = "${sqs.queue.agreement.name}")
+  @SqsListener(value = "${sqs.queue.agreement}")
   public void consumeAgreement(String message) throws JsonProcessingException {
+
+    String className = AgreementSource.class.getSimpleName();
+
     try {
 
-      log.info("Received message: {}", message);
       List<AgreementSource> agreementSources = parsingMessage.parseMessage(message,
           AgreementSource.class);
 
@@ -36,30 +48,88 @@ public class SqsConsumer {
       } else {
         agreementSources.forEach(source -> {
           try {
-            AgreementBundleContext context = new AgreementBundleContext(source.getId(),
-                source.getEventName(), source.getBusinessDt());
 
-            AgreementBundleDTO agreementBundleDTO = processingAgreement.prepareAgreementBundle(
-                source, context);
-
-            log.info("Processing agreement with AgreementNo={}, AgreementType={}, Operation={}",
-                source.getId(), source.getAgmtTypeCd(), source.getEventName());
-
-            processingAgreement.synchronize(agreementBundleDTO);
-
-            log.info("Agreement with AgreementNo={}, AgreementType={}, Operation={} with successfully processed.",
-                source.getId(), source.getAgmtTypeCd(), source.getEventName());
+            agreementPersistence.saveOrUpdate(source);
+            logInfo(SUCCESS_MESSAGE_PROCESSING, source.getClass().getSimpleName(), source.getId());
 
           } catch (Exception e) {
-            log.error("Error occurred while processing agreement source: {}", e.getMessage());
+            logError(ERROR_MESSAGE_PROCESSING, className, e.getMessage());
           }
         });
       }
     } catch (Exception e) {
-      log.error("Error occurred while parsing message: {}", e.getMessage());
-      throw  e;
+      logError(ERROR_MESSAGE_PARSING, className, e.getMessage());
+      throw e;
     }
 
   }
+
+  @SqsListener(value = "${sqs.queue.schedule}")
+  public void consumeSchedule(String message) throws JsonProcessingException {
+    String className = ScheduleSource.class.getSimpleName();
+    try {
+
+      List<ScheduleSource> scheduleSources = parsingMessage.parseMessage(message,
+          ScheduleSource.class);
+
+      if (scheduleSources.isEmpty()) {
+        log.warn("No schedule sources found in the message: {}", message);
+
+      } else {
+        scheduleSources.forEach(source -> {
+          try {
+
+            schedulePersistence.saveOrUpdate(source);
+            logInfo(SUCCESS_MESSAGE_PROCESSING, source.getClass().getSimpleName(), source.getId());
+
+          } catch (Exception e) {
+            logError(ERROR_MESSAGE_PROCESSING, className, e.getMessage());
+          }
+        });
+      }
+    } catch (Exception e) {
+      logError(ERROR_MESSAGE_PARSING, className, e.getMessage());
+      throw e;
+    }
+  }
+
+
+  @SqsListener(value = "${sqs.queue.balance}")
+  public void consumeBalance(String message) throws JsonProcessingException {
+    String className = BalanceSource.class.getSimpleName();
+    try {
+      List<BalanceSource> balanceSources = parsingMessage.parseMessage(message,
+          BalanceSource.class);
+
+      if (balanceSources.isEmpty()) {
+        log.warn("No balance sources found in the message: {}", message);
+
+      } else {
+        balanceSources.forEach(source -> {
+          try {
+
+            balancePersistence.saveOrUpdate(source);
+            logInfo(SUCCESS_MESSAGE_PROCESSING, source.getClass().getSimpleName(), source.getId());
+
+          } catch (Exception e) {
+            logError(ERROR_MESSAGE_PROCESSING, className, e.getMessage());
+          }
+        });
+      }
+
+    } catch (Exception e) {
+      logError(ERROR_MESSAGE_PARSING, className, e.getMessage());
+      throw e;
+    }
+  }
+
+  private void logError(String message, Object... args) {
+    log.error(message, args);
+  }
+
+  private void logInfo(String message, Object... args) {
+    log.info(message, args);
+  }
+
 
 }

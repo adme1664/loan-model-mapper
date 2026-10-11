@@ -6,19 +6,7 @@
   "type": "object",
   "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.BaseSource",
   "additionalProperties": false,
-  "required": [
-    "id",
-    "eventName",
-    "op",
-    "businessDt",
-    "batchId",
-    "sourceSystem"
-  ],
   "properties": {
-    "op": {
-      "description": "Type de changement : I (création), U (modification), D (suppression).",
-      "type": "string"
-    },
     "eventName": {
       "description": "Nom de l'événement.",
       "type": "string"
@@ -27,12 +15,11 @@
       "description": "Agreement ID",
       "type": "string"
     },
-    "businessDt": {
-      "description": "Date d'affaires du lot ; égale à la DG du nom de fichier.",
+    "eventId": {
       "type": "string"
     },
-    "batchId": {
-      "description": "Identifiant du lot, par exemple 20261005-01.",
+    "businessDate": {
+      "description": "Date d'affaires du lot ; égale à la DG du nom de fichier.",
       "type": "string"
     },
     "sourceSystem": {

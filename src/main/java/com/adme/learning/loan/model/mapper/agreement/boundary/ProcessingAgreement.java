@@ -48,6 +48,27 @@ public class ProcessingAgreement {
     this.bundleApiClient = factory.createClient(AgreementBundleResourceClient.class);
   }
 
+  void processAgreement(AgreementSource source) {
+    try{
+      AgreementBundleContext context = new AgreementBundleContext(source.getId(),
+          source.getEventName(), source.getBusinessDate());
+
+      AgreementBundleDTO agreementBundleDTO = prepareAgreementBundle(
+          source, context);
+
+      log.info("Processing agreement with AgreementNo={}, AgreementType={}, Operation={}",
+          source.getId(), source.getAgmtTypeCd(), source.getEventName());
+
+      synchronize(agreementBundleDTO);
+
+      log.info("Agreement with AgreementNo={}, AgreementType={}, Operation={} with successfully processed.",
+          source.getId(), source.getAgmtTypeCd(), source.getEventName());
+    }catch (Exception e){
+      log.error("Error processing agreement with AgreementNo={}, AgreementType={}, Operation={}: {}",
+          source.getId(), source.getAgmtTypeCd(), source.getEventName(), e.getMessage());
+    }
+  }
+
   AgreementBundleDTO prepareAgreementBundle(AgreementSource agreementSource,
       AgreementBundleContext context) {
     AgreementBundleDTO agreementBundleDTO = new AgreementBundleDTO();
