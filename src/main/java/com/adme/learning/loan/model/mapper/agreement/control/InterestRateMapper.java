@@ -3,8 +3,6 @@ package com.adme.learning.loan.model.mapper.agreement.control;
 import com.adme.learning.loan.model.mapper.agreement.entity.CreditInterest;
 import com.adme.learning.loan.model.mapper.agreement.entity.InterestRateType;
 import com.adme.learning.model.generator.InterestRateDTO;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,13 +27,14 @@ public abstract class InterestRateMapper {
       InterestRateDTO interestRateDTO = interestRateDTO(dto, context);
       interestRateDTO.setInterestRateType(InterestRateType.FIXED.getValue());
       interestRateDTO.setInterestRate(dto.getInterestRate());
+      interestRateDTO.setEffectiveDate(dto.getEffctvDt());
       interestRateDTOS.add(interestRateDTO);
     }
 
     if (dto.getBaseRate() != null || dto.getSpreadRate() != null) {
       InterestRateDTO interestRateDTO = interestRateDTO(dto, context);
       interestRateDTO.setInterestRateType(InterestRateType.VARIABLE.getValue());
-      interestRateDTO.setEffectiveDate(LocalDate.parse(dto.getEffctvDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+      interestRateDTO.setEffectiveDate(dto.getEffctvDt());
       interestRateDTO.setSpreadRate(dto.getSpreadRate());
       interestRateDTOS.add(interestRateDTO);
     }

@@ -3,3 +3,7 @@ spring.application.name:
 sqs.queue:
     agreement:
         name: 3857-unbk-agreement-infos-queue.fifo
+
+agreement:
+  api:
+    base-url: http://localhost:8080
