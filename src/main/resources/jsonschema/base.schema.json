@@ -10,7 +10,6 @@
     "id",
     "eventName",
     "op",
-    "changeTs",
     "businessDt",
     "batchId",
     "sourceSystem"
@@ -18,13 +17,7 @@
   "properties": {
     "op": {
       "description": "Type de changement : I (création), U (modification), D (suppression).",
-      "type": "string",
-      "enum": [
-        "I",
-        "U",
-        "D"
-      ],
-      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.Operation"
+      "type": "string"
     },
     "eventName": {
       "description": "Nom de l'événement.",
@@ -34,15 +27,9 @@
       "description": "Agreement ID",
       "type": "string"
     },
-    "changeTs": {
-      "description": "Horodatage UTC du changement dans le système source.",
-      "type": "string",
-      "format": "date-time"
-    },
     "businessDt": {
       "description": "Date d'affaires du lot ; égale à la DG du nom de fichier.",
-      "type": "string",
-      "format": "date"
+      "type": "string"
     },
     "batchId": {
       "description": "Identifiant du lot, par exemple 20261005-01.",

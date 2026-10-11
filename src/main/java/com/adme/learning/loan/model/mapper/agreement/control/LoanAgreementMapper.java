@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValueMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public interface LoanAgreementMapper {
+public abstract class LoanAgreementMapper {
 
   @Mapping(target = "agreementType", source = "agreementSource.agmtTypeCd")
   @Mapping(target = "agreementNo", expression = "java(toAgreementNo(agreementSource, agreementBundleContext))")
@@ -19,14 +19,22 @@ public interface LoanAgreementMapper {
   @Mapping(target = "unbankLetterIssuerIndicator", source = "agreementSource.unbnkLetterIssuerInd")
   @Mapping(target = "originalAmount", source = "agreementSource.originalAmt")
   @Mapping(target = "currency", source = "agreementSource.currency")
-  @Mapping(target = "effectiveDate", source = "agreementSource.effctvDt")
-  @Mapping(target = "expiryDate", source = "agreementSource.expiryDt")
-  @Mapping(target = "maturityDate", source = "agreementSource.maturityDt")
-  AgreementDTO toAgreementDTO(AgreementSource agreementSource,
+  @Mapping(target = "effectiveDate", ignore = true)
+  @Mapping(target = "expiryDate", ignore = true)
+  @Mapping(target = "maturityDate", ignore = true)
+ abstract AgreementDTO toAgreementDTO(AgreementSource agreementSource,
       AgreementBundleContext agreementBundleContext);
 
+  public AgreementDTO mapToAgreement(AgreementSource agreementSource, AgreementBundleContext context) {
+    AgreementDTO agreementDTO = toAgreementDTO(agreementSource, context);
+    agreementDTO.setEffectiveDate(CommonMapper.convertInstantToString(agreementSource.getEffctvDt()));
+    agreementDTO.setExpiryDate(CommonMapper.convertInstantToString(agreementSource.getExpiryDt()));
+    agreementDTO.setMaturityDate(CommonMapper.convertInstantToString(agreementSource.getMaturityDt()));
+    return agreementDTO;
+  }
 
-  default String toAgreementNo(AgreementSource source,
+
+   String toAgreementNo(AgreementSource source,
       AgreementBundleContext agreementBundleContext) {
     if (Objects.nonNull(source.getAgmtId())) {
       return source.getAgmtId();
@@ -34,4 +42,6 @@ public interface LoanAgreementMapper {
       return agreementBundleContext.id();
     }
   }
+
+
 }

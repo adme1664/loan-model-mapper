@@ -27,14 +27,14 @@ public abstract class InterestRateMapper {
       InterestRateDTO interestRateDTO = interestRateDTO(dto, context);
       interestRateDTO.setInterestRateType(InterestRateType.FIXED.getValue());
       interestRateDTO.setInterestRate(dto.getInterestRate());
-      interestRateDTO.setEffectiveDate(dto.getEffctvDt());
+      interestRateDTO.setEffectiveDate(CommonMapper.convertInstantToString(dto.getEffctvDt()));
       interestRateDTOS.add(interestRateDTO);
     }
 
     if (dto.getBaseRate() != null || dto.getSpreadRate() != null) {
       InterestRateDTO interestRateDTO = interestRateDTO(dto, context);
       interestRateDTO.setInterestRateType(InterestRateType.VARIABLE.getValue());
-      interestRateDTO.setEffectiveDate(dto.getEffctvDt());
+      interestRateDTO.setEffectiveDate(CommonMapper.convertInstantToString(dto.getEffctvDt()));
       interestRateDTO.setSpreadRate(dto.getSpreadRate());
       interestRateDTOS.add(interestRateDTO);
     }

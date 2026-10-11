@@ -4,6 +4,7 @@ import com.adme.learning.loan.model.mapper.agreement.control.AgreementBundleCont
 import com.adme.learning.loan.model.mapper.agreement.control.ParsingMessage;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.model.generator.AgreementBundleDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +23,10 @@ public class SqsConsumer {
   }
 
   @SqsListener(value = "${sqs.queue.agreement.name}")
-  public void consumeAgreement(String message) {
+  public void consumeAgreement(String message) throws JsonProcessingException {
     try {
 
+      log.info("Received message: {}", message);
       List<AgreementSource> agreementSources = parsingMessage.parseMessage(message,
           AgreementSource.class);
 
@@ -55,6 +57,7 @@ public class SqsConsumer {
       }
     } catch (Exception e) {
       log.error("Error occurred while parsing message: {}", e.getMessage());
+      throw  e;
     }
 
   }

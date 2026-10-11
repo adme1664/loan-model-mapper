@@ -43,13 +43,7 @@
     },
     "agmtTypeCd": {
       "description": "Type d'agreement.",
-      "type": "string",
-      "enum": [
-        "LOAN",
-        "LINE_OF_CREDIT",
-        "GUARANTY_LETTER"
-      ],
-      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.AgreementType"
+      "type": "string"
     },
     "party": {
       "$ref": "#/definitions/party"
@@ -60,13 +54,11 @@
     },
     "statusCdSrc": {
       "description": "Statut dans le système source.",
-      "type": "string",
-      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.SourceStatus"
+      "type": "string"
     },
     "statusCd": {
       "description": "Statut normalisé.",
-      "type": "string",
-      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.Status"
+      "type": "string"
     },
     "unbnkLetterIssuerInd": {
       "description": "true si la banque émet la lettre de garantie.",
@@ -80,18 +72,15 @@
     },
     "effctvDt": {
       "description": "Date d'effet.",
-      "type": "string",
-      "format": "date"
+      "type": "string"
     },
     "expiryDt": {
       "description": "Fin de la période de tirage ou de validité.",
-      "type": "string",
-      "format": "date"
+      "type": "string"
     },
     "maturityDt": {
       "description": "Échéance finale.",
-      "type": "string",
-      "format": "date"
+      "type": "string"
     },
     "currency": {
       "description": "Code de devise ISO 4217.",
@@ -178,8 +167,7 @@
         },
         "effctvDt": {
           "description": "Date d'effet du taux.",
-          "type": "string",
-          "format": "date"
+          "type": "string"
         }
       }
     },
@@ -215,13 +203,7 @@
       "properties": {
         "feeTypeCd": {
           "description": "Type de frais.",
-          "type": "string",
-          "enum": [
-            "COMMITMENT",
-            "LC_FEE",
-            "ADMIN"
-          ],
-          "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.FeeType"
+          "type": "string"
         },
         "feeRate": {
           "description": "Taux des frais, en fraction.",
@@ -237,18 +219,11 @@
         },
         "frequencyCd": {
           "description": "Fréquence de facturation.",
-          "type": "string",
-          "enum": [
-            "MONTHLY",
-            "QUARTERLY",
-            "ANNUAL"
-          ],
-          "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.Frequency"
+          "type": "string"
         },
         "effctvDt": {
           "description": "Date d'effet des frais.",
-          "type": "string",
-          "format": "date"
+          "type": "string"
         }
       }
     }

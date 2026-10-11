@@ -16,7 +16,6 @@ public abstract class BalanceMapper {
 
   @Mapping(target = "agreementId", ignore = true)
   @Mapping(target = "balanceId", ignore = true)
-  @Mapping(target = "balanceDate", source = "context.businessDate")
   public abstract BalanceDTO toBalanceDTO(AccrualInterest dto, AgreementBundleContext context);
 
 
@@ -30,6 +29,7 @@ public abstract class BalanceMapper {
     balanceDTO.setBalanceType(LoanBalanceType.ACCRUAL_INTEREST.getValue());
     balanceDTO.setCreditAmount(dto.getAccrualInterestCumulatedAmt());
     balanceDTO.setDebitAmount(BigDecimal.ZERO);
+    balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
     balanceDTOS.add(balanceDTO);
     return balanceDTOS;
   }

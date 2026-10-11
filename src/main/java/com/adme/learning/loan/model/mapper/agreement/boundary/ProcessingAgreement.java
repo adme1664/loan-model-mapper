@@ -51,7 +51,7 @@ public class ProcessingAgreement {
   AgreementBundleDTO prepareAgreementBundle(AgreementSource agreementSource,
       AgreementBundleContext context) {
     AgreementBundleDTO agreementBundleDTO = new AgreementBundleDTO();
-    agreementBundleDTO.setAgreement(loanAgreementMapper.toAgreementDTO(agreementSource, context));
+    agreementBundleDTO.setAgreement(loanAgreementMapper.mapToAgreement(agreementSource, context));
     agreementBundleDTO.setBalances(
         balanceMapper.mapToList(agreementSource.getAccrualInterest(), context));
     agreementBundleDTO.setInterestRates(
