@@ -94,7 +94,7 @@ public class ProcessEndEvent {
 
       if (!agreements.isEmpty()) {
         agreements.forEach(agreement -> {
-          if (!agreement.getId().startsWith("end")) {
+          if (!agreement.getId().startsWith("end") || !agreement.getAgmtId().startsWith("end")) {
             AgreementBundleSource agreementBundleSource = AgreementBundleSource.builder().build();
 
             AgreementSource agreementSource = agreement.getAgreementSource();

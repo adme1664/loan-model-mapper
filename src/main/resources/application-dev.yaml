@@ -1,6 +1,8 @@
-server.port: 9090
-logging.level.io.awspring.cloud: info
-aws.region: ca-central-1
+server:
+  port: 9092
+
+aws:
+  region: ca-central-1
 
 spring:
   mongodb:
@@ -9,3 +11,16 @@ spring:
 agreement:
   api:
     base-url: http://localhost:9091
+
+# Observability endpoints for local development
+loki:
+  url: http://localhost:3100/loki/api/v1/push
+
+# Prometheus scraping endpoint available at: http://localhost:9092/actuator/prometheus
+# Grafana dashboard accessible at: http://localhost:3000
+
+logging:
+  level:
+    io.awspring.cloud: INFO
+    com.adme.learning: DEBUG
+    org.springframework.data.mongodb: DEBUG

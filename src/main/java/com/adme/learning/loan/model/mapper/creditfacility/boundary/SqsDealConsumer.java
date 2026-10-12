@@ -26,7 +26,6 @@ public class SqsDealConsumer {
 
   @SqsListener(value = "${sqs.queue.deal}")
   public void consumeDealMessage(String message) {
-    log.info("Received message: {}", message);
     String className = DealSource.class.getSimpleName();
     try {
       List<DealSource> dealSources = parsingMessage.parseMessage(message, DealSource.class);

@@ -1,13 +1,41 @@
-spring.application.name:
-  loan-model-mapper
-sqs.queue:
-  agreement: 3857-unbk-agreement-infos-queue.fifo
-  balance: 3857-unbk-balance-infos-queue.fifo
-  schedule: 3857-unbk-schedule-infos-queue.fifo
-  deal: 3857-unbk-deal-infos-queue.fifo
+spring:
+  application:
+    name: loan-model-mapper
+
+sqs:
+  queue:
+    agreement: 3857-unbk-agreement-infos-queue.fifo
+    balance: 3857-unbk-balance-infos-queue.fifo
+    schedule: 3857-unbk-schedule-infos-queue.fifo
+    deal: 3857-unbk-deal-infos-queue.fifo
 
 agreement:
   api:
-    base-url: http://localhost:8080
+    base-url: http://localhost:9091
+
+# Actuator configuration for Prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+
+# Logging configuration
 logging:
   include-application-name: true
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  level:
+    root: INFO
+    com.adme.learning: DEBUG

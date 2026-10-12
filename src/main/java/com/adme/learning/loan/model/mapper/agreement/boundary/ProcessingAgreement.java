@@ -62,24 +62,30 @@ public class ProcessingAgreement {
     AgreementSource agreementSource = source.getAgreement();
     try {
 
-      BundleContext context = new BundleContext(agreementSource.getId(),
-          agreementSource.getEventName(), agreementSource.getBusinessDate());
+      if (!agreementSource.getId().startsWith("end.")) {
+        BundleContext context = new BundleContext(agreementSource.getId(),
+            agreementSource.getEventName(), agreementSource.getBusinessDate());
 
-      AgreementBundleDTO agreementBundleDTO = prepareAgreementBundle(
-          source, context);
+        AgreementBundleDTO agreementBundleDTO = prepareAgreementBundle(
+            source, context);
 
-      log.info("Processing agreement with AgreementNo={}, AgreementType={}, Operation={}",
-          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName());
+        log.info("Processing agreement with AgreementNo={}, AgreementType={}, Operation={}",
+            agreementSource.getId(), agreementSource.getAgmtTypeCd(),
+            agreementSource.getEventName());
 
-      synchronize(agreementBundleDTO);
+        synchronize(agreementBundleDTO);
 
-      log.info(
-          "Agreement with AgreementNo={}, AgreementType={}, Operation={} with successfully processed.",
-          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName());
+        log.info(
+            "Agreement with AgreementNo={}, AgreementType={}, Operation={} with successfully processed.",
+            agreementSource.getId(), agreementSource.getAgmtTypeCd(),
+            agreementSource.getEventName());
+      }
+
     } catch (Exception e) {
       log.error(
           "Error processing agreement with AgreementNo={}, AgreementType={}, Operation={}: {}",
-          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName(), e.getMessage());
+          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName(),
+          e.getMessage());
     }
   }
 
@@ -101,7 +107,8 @@ public class ProcessingAgreement {
 
     agreementBundleDTO.setParty(partyMapper.partyDTO(agreementSource.getParty()));
 
-    List<PaymentScheduleDTO> paymentScheduleDTOS = paymentScheduleMapper.mapToList(bundleSource,context);
+    List<PaymentScheduleDTO> paymentScheduleDTOS = paymentScheduleMapper.mapToList(bundleSource,
+        context);
 
     agreementBundleDTO.setPaymentSchedules(paymentScheduleDTOS);
 
