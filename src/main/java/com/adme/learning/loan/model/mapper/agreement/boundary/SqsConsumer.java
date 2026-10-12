@@ -3,11 +3,14 @@ package com.adme.learning.loan.model.mapper.agreement.boundary;
 import com.adme.learning.loan.model.mapper.agreement.control.ParsingMessage;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource;
+import com.adme.learning.loan.model.mapper.agreement.entity.BaseSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.ScheduleSource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.awspring.cloud.sqs.annotation.SqsListener;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +21,7 @@ public class SqsConsumer {
   private final AgreementPersistence agreementPersistence;
   private final BalancePersistence balancePersistence;
   private final AgreementSchedulePersistence schedulePersistence;
+  private final ProcessEndEvent processEndEvent;
 
   private static final String ERROR_MESSAGE_PROCESSING = "Error occurred while processing {} source: {}";
   private static final String ERROR_MESSAGE_PARSING = "Error occurred while parsing {} source: {}";
@@ -25,11 +29,12 @@ public class SqsConsumer {
 
   public SqsConsumer(ParsingMessage parsingMessage,
       AgreementPersistence agreementPersistence, BalancePersistence balancePersistence,
-      AgreementSchedulePersistence schedulePersistence) {
+      AgreementSchedulePersistence schedulePersistence, ProcessEndEvent processEndEvent) {
     this.parsingMessage = parsingMessage;
     this.agreementPersistence = agreementPersistence;
     this.balancePersistence = balancePersistence;
     this.schedulePersistence = schedulePersistence;
+    this.processEndEvent = processEndEvent;
   }
 
   @SqsListener(value = "${sqs.queue.agreement}")
@@ -48,9 +53,11 @@ public class SqsConsumer {
       } else {
         agreementSources.forEach(source -> {
           try {
-
             agreementPersistence.saveOrUpdate(source);
+
             logInfo(SUCCESS_MESSAGE_PROCESSING, source.getClass().getSimpleName(), source.getId());
+
+            processEndEventMessage(source);
 
           } catch (Exception e) {
             logError(ERROR_MESSAGE_PROCESSING, className, e.getMessage());
@@ -82,6 +89,8 @@ public class SqsConsumer {
             schedulePersistence.saveOrUpdate(source);
             logInfo(SUCCESS_MESSAGE_PROCESSING, source.getClass().getSimpleName(), source.getId());
 
+            processEndEventMessage(source);
+
           } catch (Exception e) {
             logError(ERROR_MESSAGE_PROCESSING, className, e.getMessage());
           }
@@ -111,6 +120,8 @@ public class SqsConsumer {
             balancePersistence.saveOrUpdate(source);
             logInfo(SUCCESS_MESSAGE_PROCESSING, source.getClass().getSimpleName(), source.getId());
 
+            processEndEventMessage(source);
+
           } catch (Exception e) {
             logError(ERROR_MESSAGE_PROCESSING, className, e.getMessage());
           }
@@ -120,6 +131,18 @@ public class SqsConsumer {
     } catch (Exception e) {
       logError(ERROR_MESSAGE_PARSING, className, e.getMessage());
       throw e;
+    }
+  }
+
+  public void processEndEventMessage(@NonNull BaseSource source) {
+    if (source.getId().startsWith("end")) {
+      boolean result = processEndEvent.processEndEvent();
+      if (result) {
+        log.info("End event processed successfully");
+        processEndEvent.processAgreement();
+      } else {
+        log.warn("Waiting for end event to be processed ...");
+      }
     }
   }
 

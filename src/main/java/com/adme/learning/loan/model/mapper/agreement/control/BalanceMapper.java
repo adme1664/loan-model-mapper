@@ -1,6 +1,7 @@
 package com.adme.learning.loan.model.mapper.agreement.control;
 
 import com.adme.learning.loan.model.mapper.agreement.entity.AccrualInterest;
+import com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.LoanBalanceType;
 import com.adme.learning.model.generator.BalanceDTO;
 import java.math.BigDecimal;
@@ -18,9 +19,8 @@ public abstract class BalanceMapper {
   @Mapping(target = "balanceId", ignore = true)
   public abstract BalanceDTO toBalanceDTO(AccrualInterest dto, AgreementBundleContext context);
 
-
   public List<BalanceDTO> mapToList(AccrualInterest dto, AgreementBundleContext context) {
-    if(Objects.isNull(dto)) {
+    if (Objects.isNull(dto)) {
       return Collections.emptyList();
     }
 
@@ -32,6 +32,53 @@ public abstract class BalanceMapper {
     balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
     balanceDTOS.add(balanceDTO);
     return balanceDTOS;
+  }
+
+  public List<BalanceDTO> mapToList(BalanceSource source, AgreementBundleContext context) {
+
+    List<BalanceDTO> balanceDTOS = new java.util.ArrayList<>();
+
+    //BankGross Amount
+    if (Objects.nonNull(source.getBankGrossAgmtAmt())) {
+      BalanceDTO balanceDTO = new BalanceDTO();
+      balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
+      balanceDTO.setBalanceType(LoanBalanceType.BANK_GROSS.getValue());
+      balanceDTO.setCreditAmount(source.getBankGrossAgmtAmt());
+      balanceDTO.setDebitAmount(BigDecimal.ZERO);
+      balanceDTOS.add(balanceDTO);
+    }
+
+    //CurrentAmnt
+    if (Objects.nonNull(source.getGlobalCurrentAgmtAmt())) {
+      BalanceDTO balanceDTO = new BalanceDTO();
+      balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
+      balanceDTO.setBalanceType(LoanBalanceType.CURRENT_ORIGINAL.getValue());
+      balanceDTO.setCreditAmount(source.getGlobalCurrentAgmtAmt());
+      balanceDTO.setDebitAmount(BigDecimal.ZERO);
+      balanceDTOS.add(balanceDTO);
+    }
+
+    //BankNet Amount
+    if (Objects.nonNull(source.getBankNetAgmtAmt())) {
+      BalanceDTO balanceDTO = new BalanceDTO();
+      balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
+      balanceDTO.setBalanceType(LoanBalanceType.BANK_NET.getValue());
+      balanceDTO.setCreditAmount(source.getBankNetAgmtAmt());
+      balanceDTO.setDebitAmount(BigDecimal.ZERO);
+      balanceDTOS.add(balanceDTO);
+    }
+
+    //Participant Amount
+    if (Objects.nonNull(source.getParticipantAgmtAmt())) {
+      BalanceDTO balanceDTO = new BalanceDTO();
+      balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
+      balanceDTO.setBalanceType(LoanBalanceType.PARTICIPANT.getValue());
+      balanceDTO.setCreditAmount(source.getParticipantAgmtAmt());
+      balanceDTO.setDebitAmount(BigDecimal.ZERO);
+      balanceDTOS.add(balanceDTO);
+    }
+    return balanceDTOS;
+
   }
 
 }

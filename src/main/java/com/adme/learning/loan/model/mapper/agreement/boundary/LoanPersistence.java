@@ -9,5 +9,6 @@ public interface LoanPersistence<E extends BaseEntity, S extends BaseSource> {
   void saveOrUpdate(S source);
   Optional<E> findById(String id);
   void deleteById(String id);
+  boolean exists(String id);
 
 }

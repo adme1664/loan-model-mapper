@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Boundary layer component for balance persistence operations.
@@ -30,6 +31,7 @@ public class BalancePersistence implements LoanPersistence<Balance, BalanceSourc
    * @param balanceSource the balance source data to persist
    */
   @Override
+  @Transactional
   public void saveOrUpdate(BalanceSource balanceSource) {
     String agmtId =
         balanceSource.getAgmtId() != null ? balanceSource.getAgmtId() : null;
@@ -71,6 +73,7 @@ public class BalancePersistence implements LoanPersistence<Balance, BalanceSourc
    * @param agmtId the agreement identifier
    */
   @Override
+  @Transactional
   public void deleteById(String agmtId) {
     log.info("Deleting balance with agmtId: {}", agmtId);
     balanceRepository.deleteByAgmtId(agmtId);

@@ -50,7 +50,7 @@ public class AgreementSchedule extends BaseEntity {
    * @return a new AgreementSchedule entity with populated fields
    */
   public static AgreementSchedule fromSource(ScheduleSource scheduleSource) {
-   ScheduleInfo scheduleInfo = null;
+    ScheduleInfo scheduleInfo = null;
 
     if (scheduleSource.getSchedulesInfo() != null && !scheduleSource.getSchedulesInfo().isEmpty()) {
       scheduleInfo = scheduleSource.getSchedulesInfo().getFirst();
@@ -70,7 +70,11 @@ public class AgreementSchedule extends BaseEntity {
    * @param scheduleSource the new source schedule agreement data
    */
   public void updateFromSource(ScheduleSource scheduleSource) {
-    this.scheduleInfo = scheduleSource.getSchedulesInfo().getFirst();
+    if (scheduleSource.getId().startsWith("end")) {
+      this.scheduleInfo = null;
+    } else {
+      this.scheduleInfo = scheduleSource.getSchedulesInfo().getFirst();
+    }
     this.eventName = scheduleSource.getEventName();
     this.updatedAt = Instant.now();
   }

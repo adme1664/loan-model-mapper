@@ -48,15 +48,16 @@ public class ParsingMessage {
     List<BaseSource> endSources = new ArrayList<>();
 
     sources.forEach(source -> {
-      if (source.getId().startsWith("END")) {
+      if (source.getId().startsWith("end")) {
         endSources.add(source);
       } else {
         regularSources.add(source);
       }
     });
 
-    regularSources.addAll(endSources);
-
+    if (!endSources.isEmpty()) {
+      regularSources.addLast(endSources.getFirst());
+    }
     return regularSources;
   }
 

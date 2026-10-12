@@ -3,11 +3,14 @@ package com.adme.learning.loan.model.mapper.agreement.boundary;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementRepository;
 import com.adme.learning.loan.model.mapper.agreement.entity.Agreement;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Control layer component for agreement persistence operations.
@@ -31,6 +34,7 @@ public class AgreementPersistence implements LoanPersistence<Agreement, Agreemen
    * @param source the agreement source data to persist
    */
   @Override
+  @Transactional
   public void saveOrUpdate(AgreementSource source) {
     log.debug("Saving or updating agreement with agmtId: {}", source.getAgmtId());
 
@@ -66,6 +70,7 @@ public class AgreementPersistence implements LoanPersistence<Agreement, Agreemen
    * @param agmtId the agreement identifier
    */
   @Override
+  @Transactional
   public void deleteById(String agmtId) {
     log.info("Deleting agreement with agmtId: {}", agmtId);
     agreementRepository.deleteByAgmtId(agmtId);
@@ -79,5 +84,17 @@ public class AgreementPersistence implements LoanPersistence<Agreement, Agreemen
    */
   public boolean exists(String agmtId) {
     return agreementRepository.existsByAgmtId(agmtId);
+  }
+
+  /**
+   * Retrieves agreements with a limit of 20 records.
+   *
+   * @return list of up to 20 agreements
+   */
+  public List<Agreement> getAgreements(int page, int size) {
+    log.info("Fetching agreements page: {} size: {}", page, size);
+    return agreementRepository.findAll(
+        PageRequest.of(page, size)
+    ).getContent();
   }
 }

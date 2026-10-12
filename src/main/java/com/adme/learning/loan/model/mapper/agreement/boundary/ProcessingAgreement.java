@@ -5,11 +5,15 @@ import com.adme.learning.loan.model.mapper.agreement.control.BalanceMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.InterestRateMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.LoanAgreementMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.PartyMapper;
+import com.adme.learning.loan.model.mapper.agreement.control.PaymentScheduleMapper;
+import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSchedule;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.OperationType;
 import com.adme.learning.model.generator.AgreementBundleDTO;
+import com.adme.learning.model.generator.BalanceDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +30,20 @@ public class ProcessingAgreement {
   private final BalanceMapper balanceMapper;
   private final InterestRateMapper interestRateMapper;
   private final PartyMapper partyMapper;
+  private final PaymentScheduleMapper paymentScheduleMapper;
   private final AgreementBundleResourceClient bundleApiClient;
   private final String agreementApiBaseUrl;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   public ProcessingAgreement(LoanAgreementMapper loanAgreementMapper, BalanceMapper balanceMapper,
       InterestRateMapper interestRateMapper, PartyMapper partyMapper,
+      PaymentScheduleMapper paymentScheduleMapper,
       @Value("${agreement.api.base-url}") String agreementApiBaseUrl) {
     this.loanAgreementMapper = loanAgreementMapper;
     this.balanceMapper = balanceMapper;
     this.interestRateMapper = interestRateMapper;
     this.partyMapper = partyMapper;
+    this.paymentScheduleMapper = paymentScheduleMapper;
     this.agreementApiBaseUrl = agreementApiBaseUrl;
 
     //set the resource client
@@ -48,36 +55,60 @@ public class ProcessingAgreement {
     this.bundleApiClient = factory.createClient(AgreementBundleResourceClient.class);
   }
 
-  void processAgreement(AgreementSource source) {
-    try{
-      AgreementBundleContext context = new AgreementBundleContext(source.getId(),
-          source.getEventName(), source.getBusinessDate());
+  void processAgreement() {
+    log.info("Start fetching agreement ...");
+
+  }
+
+  void processAgreement(AgreementBundleSource source) {
+    AgreementSource agreementSource = source.getAgreement();
+    try {
+
+      AgreementBundleContext context = new AgreementBundleContext(agreementSource.getId(),
+          agreementSource.getEventName(), agreementSource.getBusinessDate());
 
       AgreementBundleDTO agreementBundleDTO = prepareAgreementBundle(
           source, context);
 
       log.info("Processing agreement with AgreementNo={}, AgreementType={}, Operation={}",
-          source.getId(), source.getAgmtTypeCd(), source.getEventName());
+          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName());
 
       synchronize(agreementBundleDTO);
 
-      log.info("Agreement with AgreementNo={}, AgreementType={}, Operation={} with successfully processed.",
-          source.getId(), source.getAgmtTypeCd(), source.getEventName());
-    }catch (Exception e){
-      log.error("Error processing agreement with AgreementNo={}, AgreementType={}, Operation={}: {}",
-          source.getId(), source.getAgmtTypeCd(), source.getEventName(), e.getMessage());
+      log.info(
+          "Agreement with AgreementNo={}, AgreementType={}, Operation={} with successfully processed.",
+          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName());
+    } catch (Exception e) {
+      log.error(
+          "Error processing agreement with AgreementNo={}, AgreementType={}, Operation={}: {}",
+          agreementSource.getId(), agreementSource.getAgmtTypeCd(), agreementSource.getEventName(), e.getMessage());
     }
   }
 
-  AgreementBundleDTO prepareAgreementBundle(AgreementSource agreementSource,
+  AgreementBundleDTO prepareAgreementBundle(AgreementBundleSource bundleSource,
       AgreementBundleContext context) {
     AgreementBundleDTO agreementBundleDTO = new AgreementBundleDTO();
+
+    AgreementSource agreementSource = bundleSource.getAgreement();
+
     agreementBundleDTO.setAgreement(loanAgreementMapper.mapToAgreement(agreementSource, context));
+
     agreementBundleDTO.setBalances(
         balanceMapper.mapToList(agreementSource.getAccrualInterest(), context));
+
+    List<BalanceDTO> balanceDTOS = balanceMapper.mapToList(bundleSource.getBalance(), context);
+    agreementBundleDTO.getBalances().addAll(balanceDTOS);
+
     agreementBundleDTO.setInterestRates(
         interestRateMapper.mapToList(agreementSource.getCreditInterest(), context));
+
     agreementBundleDTO.setParty(partyMapper.partyDTO(agreementSource.getParty()));
+
+    AgreementSchedule agreementSchedule = bundleSource.getSchedule();
+    agreementSchedule.getScheduleInfo().setBusinessDate(context.businessDate());
+
+    agreementBundleDTO.setPaymentSchedules(paymentScheduleMapper.mapToList(agreementSchedule));
+
     agreementBundleDTO.setAgreementNo(context.id());
     agreementBundleDTO.setOperation(context.eventName());
     return agreementBundleDTO;

@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Boundary layer component for schedule persistence operations.
@@ -30,6 +31,7 @@ public class AgreementSchedulePersistence implements LoanPersistence<AgreementSc
    * @param source the schedule source data to persist
    */
   @Override
+  @Transactional
   public void saveOrUpdate(ScheduleSource source) {
 
     log.debug("Saving or updating schedule with agreementId: {}", source.getId());
@@ -61,6 +63,7 @@ public class AgreementSchedulePersistence implements LoanPersistence<AgreementSc
   }
 
   @Override
+  @Transactional
   public void deleteById(String agmntId) {
     log.info("Deleting schedule with agmtId: {}", agmntId);
     scheduleRepository.deleteByAgmtId(agmntId);
