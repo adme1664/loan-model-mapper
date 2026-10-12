@@ -2,6 +2,7 @@ package com.adme.learning.loan.model.mapper.agreement.control;
 
 import com.adme.learning.loan.model.mapper.agreement.entity.CreditInterest;
 import com.adme.learning.loan.model.mapper.agreement.entity.InterestRateType;
+import com.adme.learning.loan.model.mapper.common.BundleContext;
 import com.adme.learning.model.generator.InterestRateDTO;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +16,9 @@ public abstract class InterestRateMapper {
 
   @Mapping(target = "agreementId", ignore = true)
   @Mapping(target = "interestRateId", ignore = true)
-  public abstract InterestRateDTO interestRateDTO(CreditInterest dto, AgreementBundleContext context);
+  public abstract InterestRateDTO interestRateDTO(CreditInterest dto, BundleContext context);
 
-  public List<InterestRateDTO> mapToList(CreditInterest dto, AgreementBundleContext context) {
+  public List<InterestRateDTO> mapToList(CreditInterest dto, BundleContext context) {
     if(dto == null) {
       return Collections.emptyList();
     }

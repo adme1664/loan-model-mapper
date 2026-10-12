@@ -1,13 +1,16 @@
 package com.adme.learning.loan.model.mapper.agreement.boundary;
 
-import com.adme.learning.loan.model.mapper.agreement.control.ParsingMessage;
+import static com.adme.learning.loan.model.mapper.common.LogMessage.ERROR_MESSAGE_PARSING;
+import static com.adme.learning.loan.model.mapper.common.LogMessage.ERROR_MESSAGE_PROCESSING;
+import static com.adme.learning.loan.model.mapper.common.LogMessage.SUCCESS_MESSAGE_PROCESSING;
+
+import com.adme.learning.loan.model.mapper.common.ParsingMessage;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.BaseSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.ScheduleSource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.awspring.cloud.sqs.annotation.SqsListener;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class SqsConsumer {
+public class SqsAgreementConsumer {
 
   private final ParsingMessage parsingMessage;
   private final AgreementPersistence agreementPersistence;
@@ -23,11 +26,8 @@ public class SqsConsumer {
   private final AgreementSchedulePersistence schedulePersistence;
   private final ProcessEndEvent processEndEvent;
 
-  private static final String ERROR_MESSAGE_PROCESSING = "Error occurred while processing {} source: {}";
-  private static final String ERROR_MESSAGE_PARSING = "Error occurred while parsing {} source: {}";
-  private static final String SUCCESS_MESSAGE_PROCESSING = "Successfully processed {} with ID={} source: {}";
 
-  public SqsConsumer(ParsingMessage parsingMessage,
+  public SqsAgreementConsumer(ParsingMessage parsingMessage,
       AgreementPersistence agreementPersistence, BalancePersistence balancePersistence,
       AgreementSchedulePersistence schedulePersistence, ProcessEndEvent processEndEvent) {
     this.parsingMessage = parsingMessage;

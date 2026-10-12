@@ -1,4 +1,4 @@
-package com.adme.learning.loan.model.mapper.agreement.control;
+package com.adme.learning.loan.model.mapper.common;
 
 import com.adme.learning.loan.model.mapper.agreement.entity.BaseSource;
 import com.fasterxml.jackson.core.JsonProcessingException;

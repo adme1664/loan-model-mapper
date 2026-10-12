@@ -1,6 +1,5 @@
 package com.adme.learning.loan.model.mapper.agreement.boundary;
 
-import com.adme.learning.loan.model.mapper.agreement.control.AgreementBundleContext;
 import com.adme.learning.loan.model.mapper.agreement.control.BalanceMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.InterestRateMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.LoanAgreementMapper;
@@ -9,6 +8,7 @@ import com.adme.learning.loan.model.mapper.agreement.control.PaymentScheduleMapp
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSchedule;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.OperationType;
+import com.adme.learning.loan.model.mapper.common.BundleContext;
 import com.adme.learning.model.generator.AgreementBundleDTO;
 import com.adme.learning.model.generator.BalanceDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +32,6 @@ public class ProcessingAgreement {
   private final PartyMapper partyMapper;
   private final PaymentScheduleMapper paymentScheduleMapper;
   private final AgreementBundleResourceClient bundleApiClient;
-  private final String agreementApiBaseUrl;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   public ProcessingAgreement(LoanAgreementMapper loanAgreementMapper, BalanceMapper balanceMapper,
@@ -44,7 +43,6 @@ public class ProcessingAgreement {
     this.interestRateMapper = interestRateMapper;
     this.partyMapper = partyMapper;
     this.paymentScheduleMapper = paymentScheduleMapper;
-    this.agreementApiBaseUrl = agreementApiBaseUrl;
 
     //set the resource client
     WebClient agreementWebClient = WebClient.builder().baseUrl(agreementApiBaseUrl).build();
@@ -64,7 +62,7 @@ public class ProcessingAgreement {
     AgreementSource agreementSource = source.getAgreement();
     try {
 
-      AgreementBundleContext context = new AgreementBundleContext(agreementSource.getId(),
+      BundleContext context = new BundleContext(agreementSource.getId(),
           agreementSource.getEventName(), agreementSource.getBusinessDate());
 
       AgreementBundleDTO agreementBundleDTO = prepareAgreementBundle(
@@ -86,7 +84,7 @@ public class ProcessingAgreement {
   }
 
   AgreementBundleDTO prepareAgreementBundle(AgreementBundleSource bundleSource,
-      AgreementBundleContext context) {
+      BundleContext context) {
     AgreementBundleDTO agreementBundleDTO = new AgreementBundleDTO();
 
     AgreementSource agreementSource = bundleSource.getAgreement();

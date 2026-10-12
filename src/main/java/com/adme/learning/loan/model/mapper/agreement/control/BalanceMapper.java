@@ -3,6 +3,7 @@ package com.adme.learning.loan.model.mapper.agreement.control;
 import com.adme.learning.loan.model.mapper.agreement.entity.AccrualInterest;
 import com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.LoanBalanceType;
+import com.adme.learning.loan.model.mapper.common.BundleContext;
 import com.adme.learning.model.generator.BalanceDTO;
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -17,9 +18,9 @@ public abstract class BalanceMapper {
 
   @Mapping(target = "agreementId", ignore = true)
   @Mapping(target = "balanceId", ignore = true)
-  public abstract BalanceDTO toBalanceDTO(AccrualInterest dto, AgreementBundleContext context);
+  public abstract BalanceDTO toBalanceDTO(AccrualInterest dto, BundleContext context);
 
-  public List<BalanceDTO> mapToList(AccrualInterest dto, AgreementBundleContext context) {
+  public List<BalanceDTO> mapToList(AccrualInterest dto, BundleContext context) {
     if (Objects.isNull(dto)) {
       return Collections.emptyList();
     }
@@ -34,7 +35,7 @@ public abstract class BalanceMapper {
     return balanceDTOS;
   }
 
-  public List<BalanceDTO> mapToList(BalanceSource source, AgreementBundleContext context) {
+  public List<BalanceDTO> mapToList(BalanceSource source, BundleContext context) {
 
     List<BalanceDTO> balanceDTOS = new java.util.ArrayList<>();
 

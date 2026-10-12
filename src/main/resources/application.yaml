@@ -4,6 +4,7 @@ sqs.queue:
   agreement: 3857-unbk-agreement-infos-queue.fifo
   balance: 3857-unbk-balance-infos-queue.fifo
   schedule: 3857-unbk-schedule-infos-queue.fifo
+  deal: 3857-unbk-deal-infos-queue.fifo
 
 agreement:
   api:
