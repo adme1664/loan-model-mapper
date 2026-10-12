@@ -30,6 +30,9 @@ management:
         enabled: true
     tags:
       application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0  # Sample 100% of requests for dev (reduce in prod)
 
 # Logging configuration
 logging:
