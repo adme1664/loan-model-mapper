@@ -1,6 +1,8 @@
 package com.adme.learning.loan.model.mapper.agreement.control;
 
+import com.adme.learning.loan.model.mapper.agreement.boundary.AgreementBundleSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.AccrualInterest;
+import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.LoanBalanceType;
 import com.adme.learning.loan.model.mapper.common.BundleContext;
@@ -20,24 +22,28 @@ public abstract class BalanceMapper {
   @Mapping(target = "balanceId", ignore = true)
   public abstract BalanceDTO toBalanceDTO(AccrualInterest dto, BundleContext context);
 
-  public List<BalanceDTO> mapToList(AccrualInterest dto, BundleContext context) {
-    if (Objects.isNull(dto)) {
+  public BalanceDTO mapToBalance(AgreementSource dto, BundleContext context) {
+    if (Objects.isNull(dto) || Objects.isNull(dto.getAccrualInterest())) {
+      return null;
+    }
+    AccrualInterest accrualInterest = dto.getAccrualInterest();
+    BalanceDTO balanceDTO = toBalanceDTO(accrualInterest, context);
+    balanceDTO.setBalanceType(LoanBalanceType.ACCRUAL_INTEREST.getValue());
+    balanceDTO.setCreditAmount(accrualInterest.getAccrualInterestCumulatedAmt());
+    balanceDTO.setDebitAmount(BigDecimal.ZERO);
+    balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
+   return balanceDTO;
+  }
+
+  public List<BalanceDTO> mapToList(AgreementBundleSource dto, BundleContext context) {
+
+    List<BalanceDTO> balanceDTOS = new java.util.ArrayList<>();
+
+    if (Objects.isNull(dto) || Objects.isNull(dto.getBalance())) {
       return Collections.emptyList();
     }
 
-    List<BalanceDTO> balanceDTOS = new java.util.ArrayList<>();
-    BalanceDTO balanceDTO = toBalanceDTO(dto, context);
-    balanceDTO.setBalanceType(LoanBalanceType.ACCRUAL_INTEREST.getValue());
-    balanceDTO.setCreditAmount(dto.getAccrualInterestCumulatedAmt());
-    balanceDTO.setDebitAmount(BigDecimal.ZERO);
-    balanceDTO.setBalanceDate(CommonMapper.convertInstantToString(context.businessDate()));
-    balanceDTOS.add(balanceDTO);
-    return balanceDTOS;
-  }
-
-  public List<BalanceDTO> mapToList(BalanceSource source, BundleContext context) {
-
-    List<BalanceDTO> balanceDTOS = new java.util.ArrayList<>();
+    BalanceSource source = dto.getBalance();
 
     //BankGross Amount
     if (Objects.nonNull(source.getBankGrossAgmtAmt())) {

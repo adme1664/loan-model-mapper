@@ -5,12 +5,12 @@ import com.adme.learning.loan.model.mapper.agreement.control.InterestRateMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.LoanAgreementMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.PartyMapper;
 import com.adme.learning.loan.model.mapper.agreement.control.PaymentScheduleMapper;
-import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSchedule;
 import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.OperationType;
 import com.adme.learning.loan.model.mapper.common.BundleContext;
 import com.adme.learning.model.generator.AgreementBundleDTO;
 import com.adme.learning.model.generator.BalanceDTO;
+import com.adme.learning.model.generator.PaymentScheduleDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -91,10 +91,9 @@ public class ProcessingAgreement {
 
     agreementBundleDTO.setAgreement(loanAgreementMapper.mapToAgreement(agreementSource, context));
 
-    agreementBundleDTO.setBalances(
-        balanceMapper.mapToList(agreementSource.getAccrualInterest(), context));
+    agreementBundleDTO.addBalancesItem(balanceMapper.mapToBalance(agreementSource, context));
 
-    List<BalanceDTO> balanceDTOS = balanceMapper.mapToList(bundleSource.getBalance(), context);
+    List<BalanceDTO> balanceDTOS = balanceMapper.mapToList(bundleSource, context);
     agreementBundleDTO.getBalances().addAll(balanceDTOS);
 
     agreementBundleDTO.setInterestRates(
@@ -102,10 +101,9 @@ public class ProcessingAgreement {
 
     agreementBundleDTO.setParty(partyMapper.partyDTO(agreementSource.getParty()));
 
-    AgreementSchedule agreementSchedule = bundleSource.getSchedule();
-    agreementSchedule.getScheduleInfo().setBusinessDate(context.businessDate());
+    List<PaymentScheduleDTO> paymentScheduleDTOS = paymentScheduleMapper.mapToList(bundleSource,context);
 
-    agreementBundleDTO.setPaymentSchedules(paymentScheduleMapper.mapToList(agreementSchedule));
+    agreementBundleDTO.setPaymentSchedules(paymentScheduleDTOS);
 
     agreementBundleDTO.setAgreementNo(context.id());
     agreementBundleDTO.setOperation(context.eventName());
@@ -113,8 +111,6 @@ public class ProcessingAgreement {
   }
 
   void synchronize(AgreementBundleDTO agreementBundleDTO) throws JsonProcessingException {
-    String message = objectMapper.writeValueAsString(agreementBundleDTO);
-    log.info("Sending message to agreement api: {}", message);
     if (OperationType.INSERT.getValue().equals(agreementBundleDTO.getOperation())) {
       var response = bundleApiClient.createAgreementBundle(agreementBundleDTO);
       processResponse(response, agreementBundleDTO);

@@ -40,7 +40,7 @@ public class SqsDealConsumer {
             BundleContext bundleContext = new BundleContext(dealSource.getId(),
                 dealSource.getEventName(), dealSource.getBusinessDate());
 
-            processingCreditFacility.prepareCreditFacilityBundle(dealSource, bundleContext);
+            processingCreditFacility.processingCreditFacility(dealSource, bundleContext);
 
             log.info(SUCCESS_MESSAGE_PROCESSING, className, dealSource.getId(),
                 dealSource.getEventName());

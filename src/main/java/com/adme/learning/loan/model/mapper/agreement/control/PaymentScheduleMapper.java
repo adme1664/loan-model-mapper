@@ -1,7 +1,8 @@
 package com.adme.learning.loan.model.mapper.agreement.control;
 
-import com.adme.learning.loan.model.mapper.agreement.entity.AgreementSchedule;
+import com.adme.learning.loan.model.mapper.agreement.boundary.AgreementBundleSource;
 import com.adme.learning.loan.model.mapper.agreement.entity.RepymtLineItem;
+import com.adme.learning.loan.model.mapper.common.BundleContext;
 import com.adme.learning.model.generator.PaymentScheduleDTO;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,27 +20,27 @@ public abstract class PaymentScheduleMapper {
   @Mapping(target = "agreementId", ignore = true)
   abstract PaymentScheduleDTO toPaymentScheduleDTO(RepymtLineItem item);
 
-  public List<PaymentScheduleDTO> mapToList(AgreementSchedule agreementSchedule) {
+  public List<PaymentScheduleDTO> mapToList(AgreementBundleSource source,  BundleContext context) {
 
-    if (Objects.isNull(agreementSchedule)) {
+    if (Objects.isNull(source.getSchedule())) {
       return Collections.emptyList();
     }
 
-    if (Objects.isNull(agreementSchedule.getScheduleInfo())) {
+    if (Objects.isNull(source.getSchedule().getScheduleInfo())) {
       return Collections.emptyList();
     }
 
-    if (agreementSchedule.getScheduleInfo().getRepymtLineItem().isEmpty()) {
+    if (source.getSchedule().getScheduleInfo().getRepymtLineItem().isEmpty()) {
       return Collections.emptyList();
     }
     List<PaymentScheduleDTO> paymentScheduleDTOS = new ArrayList<>();
 
-    List<RepymtLineItem> items = agreementSchedule.getScheduleInfo().getRepymtLineItem();
+    List<RepymtLineItem> items = source.getSchedule().getScheduleInfo().getRepymtLineItem();
 
     for (RepymtLineItem item : items) {
       PaymentScheduleDTO paymentScheduleDTO = toPaymentScheduleDTO(item);
       paymentScheduleDTO.setBusinessDate(CommonMapper.convertInstantToString(
-          agreementSchedule.getScheduleInfo().getBusinessDate()));
+          context.businessDate()));
       paymentScheduleDTO.setPaymentDate(CommonMapper.convertInstantToString(item.getRepymtDate()));
       paymentScheduleDTOS.add(paymentScheduleDTO);
     }
