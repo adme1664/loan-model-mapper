@@ -99,7 +99,7 @@ public class ProcessingAgreement {
 
     agreementBundleDTO.addBalancesItem(balanceMapper.mapToBalance(agreementSource, context));
 
-    List<BalanceDTO> balanceDTOS = balanceMapper.mapToList(bundleSource, context);
+    List<BalanceDTO> balanceDTOS = balanceMapper.mapToList(bundleSource.getBalance(), context);
     agreementBundleDTO.getBalances().addAll(balanceDTOS);
 
     agreementBundleDTO.setInterestRates(

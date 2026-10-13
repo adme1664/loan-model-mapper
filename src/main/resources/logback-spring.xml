@@ -34,7 +34,7 @@
     </root>
 
     <!-- Application specific logging -->
-    <logger name="com.adme.learning" level="DEBUG"/>
+    <logger name="com.adme.learning" level="INFO"/>
     <logger name="io.awspring.cloud" level="INFO"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.mongodb" level="INFO"/>

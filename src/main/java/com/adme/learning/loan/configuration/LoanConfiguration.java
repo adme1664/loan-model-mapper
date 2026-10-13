@@ -1,8 +1,12 @@
 package com.adme.learning.loan.configuration;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.web.reactive.function.client.WebClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -18,6 +22,27 @@ public class LoanConfiguration {
       @Value("${agreement.api.base-url}") String agreementUrl) {
     this.awsRegion = awsRegion;
     this.agreementUrl = agreementUrl;
+  }
+
+  @Bean(name = "balanceTopic")
+  public NewTopic balanceTopic() {
+    return TopicBuilder.name("3857.dev.nrt.balances.info")
+        .partitions(1)
+        .replicas(1)
+        .build();
+  }
+
+  @Bean(name = "transactionTopic")
+  public NewTopic transactionTopic() {
+    return TopicBuilder.name("3857.dev.nrt.transactions.info")
+        .partitions(1)
+        .replicas(1)
+        .build();
+  }
+
+  @Bean
+  public Gson gson() {
+    return new GsonBuilder().serializeNulls().create();
   }
 
   @Bean(name = "agreementWebClient")

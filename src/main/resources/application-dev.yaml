@@ -7,6 +7,16 @@ aws:
 spring:
   mongodb:
     uri: mongodb://admin:bigdata@localhost:27017/bigdata?authSource=admin
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: loan-model-mapper-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.adme.learning.loan.model.mapper.common
+        spring.json.value.default.type: com.adme.learning.loan.model.mapper.common.Event
 
 agreement:
   api:
@@ -28,6 +38,6 @@ management:
 
 logging:
   level:
-    io.awspring.cloud: INFO
-    com.adme.learning: DEBUG
-    org.springframework.data.mongodb: DEBUG
+    io.awspring.cloud: ERROR
+    com.adme.learning: ERROR
+    org.springframework.data.mongodb: ERROR

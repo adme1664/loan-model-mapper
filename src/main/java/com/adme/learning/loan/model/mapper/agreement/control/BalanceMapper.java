@@ -35,15 +35,13 @@ public abstract class BalanceMapper {
    return balanceDTO;
   }
 
-  public List<BalanceDTO> mapToList(AgreementBundleSource dto, BundleContext context) {
+  public List<BalanceDTO> mapToList(BalanceSource source, BundleContext context) {
 
     List<BalanceDTO> balanceDTOS = new java.util.ArrayList<>();
 
-    if (Objects.isNull(dto) || Objects.isNull(dto.getBalance())) {
+    if ( Objects.isNull(source)) {
       return Collections.emptyList();
     }
-
-    BalanceSource source = dto.getBalance();
 
     //BankGross Amount
     if (Objects.nonNull(source.getBankGrossAgmtAmt())) {

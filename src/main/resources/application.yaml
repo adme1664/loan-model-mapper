@@ -1,6 +1,9 @@
 spring:
   application:
     name: loan-model-mapper
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
 
 sqs:
   queue:
@@ -25,20 +28,25 @@ management:
     prometheus:
       enabled: true
   metrics:
-    export:
-      prometheus:
-        enabled: true
     tags:
       application: ${spring.application.name}
   tracing:
     sampling:
       probability: 1.0  # Sample 100% of requests for dev (reduce in prod)
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 # Logging configuration
 logging:
-  include-application-name: true
+  include-application-name: false
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
   level:
-    root: INFO
-    com.adme.learning: DEBUG
+    root: ERROR
+    com.adme.learning: INFO
+    org.apache.kafka: ERROR
+    org.springframework.kafka: ERROR
+
