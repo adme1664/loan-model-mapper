@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unbnk.example/schemas/schedule.schema.json",
+  "title": "Schedule",
+  "description": "Un enregistrement du fichier UNBNK_SCHEDULE_DG_AAAAMMJJ_DT_AAAAMMJJ.json (le fichier est un tableau de ces objets).",
+  "type": "object",
+  "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.ScheduleSource",
+  "additionalProperties": false,
+  "extends": {
+    "$ref": "base.schema.json"
+  },
+  "required": [
+    "agmtId",
+    "schedulesInfo"
+  ],
+  "properties": {
+    "agmtId": {
+      "description": "Identifiant parent : la credit facility (clé).",
+      "type": "string"
+    },
+    "schedulesInfo": {
+      "description": "Échéanciers au niveau facility (peut être vide).",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/scheduleInfo"
+      }
+    }
+  },
+  "definitions": {
+    "scheduleInfo": {
+      "description": "Un échéancier de remboursement.",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.ScheduleInfo",
+      "additionalProperties": false,
+      "extends": {
+        "$ref": "base.schema.json"
+      },
+      "required": [
+        "repymtTypeCd",
+        "repymtFrequencyTypeCd",
+        "repymtNbrItems",
+        "repymtLineItem"
+      ],
+      "properties": {
+        "repymtTypeCd": {
+          "description": "Code du type de remboursement, par exemple CEDL/FLEX.",
+          "type": "string"
+        },
+        "repymtTypeAbrFr": {
+          "description": "Abréviation française du type.",
+          "type": "string"
+        },
+        "repymtTypeAbrEn": {
+          "description": "Abréviation anglaise du type.",
+          "type": "string"
+        },
+        "repymtTypeNameFr": {
+          "description": "Nom français du type.",
+          "type": "string"
+        },
+        "repymtTypeNameEn": {
+          "description": "Nom anglais du type.",
+          "type": "string"
+        },
+        "repymtFrequencyTypeCd": {
+          "description": "Fréquence : MENSUEL, TRIMESTRIEL, ANNUEL, INCONNU, etc.",
+          "type": "string"
+        },
+        "repymtFrequencyTypeAbrFr": {
+          "description": "Abréviation française de la fréquence.",
+          "type": "string"
+        },
+        "repymtFrequencyTypeAbrEn": {
+          "description": "Abréviation anglaise de la fréquence.",
+          "type": "string"
+        },
+        "repymtFrequencyTypeNameFr": {
+          "description": "Nom français de la fréquence.",
+          "type": "string"
+        },
+        "repymtFrequencyTypeNameEn": {
+          "description": "Nom anglais de la fréquence.",
+          "type": "string"
+        },
+        "repymtNbrItems": {
+          "description": "Nombre de versements ; égal au nombre de lignes.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "repymtLineItem": {
+          "description": "Versements prévus.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/repymtLineItem"
+          }
+        }
+      }
+    },
+    "repymtLineItem": {
+      "description": "Un versement prévu.",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.RepymtLineItem",
+      "additionalProperties": false,
+      "required": [
+        "repymtLineNo",
+        "repymtAmt",
+        "repymtDate"
+      ],
+      "properties": {
+        "repymtLineNo": {
+          "description": "Numéro de ligne, à partir de 1.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "repymtAmt": {
+          "description": "Montant du versement ; négatif = remboursement à la banque.",
+          "type": "number",
+          "existingJavaType": "java.math.BigDecimal"
+        },
+        "repymtDate": {
+          "description": "Date prévue du versement.",
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "scheduleAgreement": {
+      "description": "Échéanciers d'un agreement.",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.ScheduleAgreement",
+      "additionalProperties": false,
+      "extends": {
+        "$ref": "base.schema.json"
+      },
+      "required": [
+        "agmtId",
+        "schedulesInfo"
+      ],
+      "properties": {
+        "agmtId": {
+          "description": "Renvoie vers le fichier AGREEMENT (clé).",
+          "type": "string"
+        },
+        "schedulesInfo": {
+          "description": "Échéanciers de l'agreement (peut être vide).",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/scheduleInfo"
+          }
+        }
+      }
+    }
+  }
+}

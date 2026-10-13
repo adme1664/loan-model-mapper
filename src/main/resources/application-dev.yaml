@@ -1,0 +1,43 @@
+server:
+  port: 9092
+
+aws:
+  region: ca-central-1
+
+spring:
+  mongodb:
+    uri: mongodb://admin:bigdata@localhost:27017/bigdata?authSource=admin
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: loan-model-mapper-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.adme.learning.loan.model.mapper.common
+        spring.json.value.default.type: com.adme.learning.loan.model.mapper.common.Event
+
+agreement:
+  api:
+    base-url: http://localhost:9091
+
+# Observability endpoints for local development
+loki:
+  url: http://localhost:3100/loki/api/v1/push
+
+# Zipkin distributed tracing
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+# Prometheus scraping endpoint available at: http://localhost:9092/actuator/prometheus
+# Grafana dashboard accessible at: http://localhost:3000
+# Zipkin UI available at: http://localhost:9411
+
+logging:
+  level:
+    io.awspring.cloud: ERROR
+    com.adme.learning: ERROR
+    org.springframework.data.mongodb: ERROR

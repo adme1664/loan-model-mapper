@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unbnk.example/schemas/agreement.schema.json",
+  "title": "Agreement",
+  "description": "Un enregistrement du fichier UNBNK_AGREEMENT_DG_AAAAMMJJ_DT_AAAAMMJJ.json (le fichier est un tableau de ces objets).",
+  "type": "object",
+  "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.AgreementSource",
+  "additionalProperties": false,
+  "extends": {
+    "$ref": "base.schema.json"
+  },
+  "required": [
+    "agmtId",
+    "agmtInternalId",
+    "creditFacilityId",
+    "agmtTypeCd",
+    "party",
+    "productCd",
+    "statusCdSrc",
+    "statusCd",
+    "unbnkLetterIssuerInd",
+    "originalAmt",
+    "effctvDt",
+    "expiryDt",
+    "maturityDt",
+    "currency",
+    "creditInterest",
+    "accrualInterest",
+    "feeCharge"
+  ],
+  "properties": {
+    "agmtId": {
+      "description": "Identifiant de l'agreement (clé), zéros en tête conservés.",
+      "type": "string"
+    },
+    "agmtInternalId": {
+      "description": "Identifiant interne dans le système source.",
+      "type": "string"
+    },
+    "op": {
+      "type": "string",
+      "description": "Opération à effectuer."
+    },
+    "batchId": {
+      "type": "string",
+      "description": "Identifiant du lot."
+    },
+    "businessDt": {
+      "description": "Date d'affaires du lot ; égale à la DG du nom de fichier.",
+      "type": "string"
+
+    },
+    "creditFacilityId": {
+      "description": "Clé étrangère vers la credit facility du fichier DEAL.",
+      "type": "string"
+    },
+    "agmtTypeCd": {
+      "description": "Type d'agreement.",
+      "type": "string",
+      "enum": [
+        "LOAN",
+        "LINE_OF_CREDIT",
+        "GUARANTY_LETTER"
+      ],
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.AgreementType"
+      "type": "string"
+    },
+    "party": {
+      "$ref": "#/definitions/party"
+    },
+    "productCd": {
+      "description": "Code produit, par exemple 7806LOANPRCAD.",
+      "type": "string"
+    },
+    "statusCdSrc": {
+      "description": "Statut dans le système source.",
+      "type": "string"
+    },
+    "statusCd": {
+      "description": "Statut normalisé.",
+      "type": "string"
+    },
+    "unbnkLetterIssuerInd": {
+      "description": "true si la banque émet la lettre de garantie.",
+      "type": "boolean"
+    },
+    "originalAmt": {
+      "description": "Montant initial accordé.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "effctvDt": {
+      "description": "Date d'effet.",
+      "type": "string"
+    },
+    "expiryDt": {
+      "description": "Fin de la période de tirage ou de validité.",
+      "type": "string"
+    },
+    "maturityDt": {
+      "description": "Échéance finale.",
+      "type": "string"
+    },
+    "currency": {
+      "description": "Code de devise ISO 4217.",
+      "type": "string"
+    },
+    "creditInterest": {
+      "$ref": "#/definitions/creditInterest"
+    },
+    "accrualInterest": {
+      "$ref": "#/definitions/accrualInterest"
+    },
+    "feeCharge": {
+      "description": "Frais rattachés à l'agreement (peut être vide).",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/feeCharge"
+      }
+    }
+  },
+  "definitions": {
+    "party": {
+      "description": "Partie emprunteuse de l'agreement.",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.Party",
+      "additionalProperties": false,
+      "required": [
+        "memberIdNo",
+        "primaryBorrowerInd"
+      ],
+      "properties": {
+        "unbnkId": {
+          "description": "Identifiant client interne ; chaîne vide possible.",
+          "type": "string"
+        },
+        "memberIdNo": {
+          "description": "Identifiant de l'entreprise, zéros en tête conservés.",
+          "type": "string"
+        },
+        "primaryBorrowerInd": {
+          "description": "true si emprunteur principal.",
+          "type": "boolean"
+        }
+      }
+    },
+    "creditInterest": {
+      "description": "Conditions de taux. baseRate, spreadRate et benchmarkRateAdj sont nuls pour un taux fixe.",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.CreditInterest",
+      "additionalProperties": false,
+      "properties": {
+        "interestRate": {
+          "description": "Taux total appliqué, en fraction (0.0535 = 5,35 %).",
+          "type": "number",
+          "existingJavaType": "java.math.BigDecimal",
+          "minimum": 0
+        },
+        "interestRateFixeInd": {
+          "description": "true = taux fixe, false = taux variable.",
+          "type": "boolean"
+        },
+        "baseRate": {
+          "description": "Taux de référence (taux variable seulement).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "existingJavaType": "java.math.BigDecimal"
+        },
+        "spreadRate": {
+          "description": "Marge ajoutée au taux de base (taux variable seulement).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "existingJavaType": "java.math.BigDecimal"
+        },
+        "benchmarkRateAdj": {
+          "description": "Ajustement du taux de référence.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "existingJavaType": "java.math.BigDecimal"
+        },
+        "effctvDt": {
+          "description": "Date d'effet du taux.",
+          "type": "string"
+        }
+      }
+    },
+    "accrualInterest": {
+      "description": "Intérêts courus à la date d'affaires.",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.AccrualInterest",
+      "additionalProperties": false,
+      "properties": {
+        "pymtDueInd": {
+          "description": "true si un paiement d'intérêts est dû.",
+          "type": "boolean"
+        },
+        "accrualInterestCumulatedAmt": {
+          "description": "Intérêts courus cumulés.",
+          "type": "number",
+          "existingJavaType": "java.math.BigDecimal",
+          "minimum": 0
+        },
+        "accrualInterestDailyAmt": {
+          "description": "Intérêts courus du jour.",
+          "type": "number",
+          "existingJavaType": "java.math.BigDecimal",
+          "minimum": 0
+        }
+      }
+    },
+    "feeCharge": {
+      "description": "Frais (structure proposée).",
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.FeeCharge",
+      "additionalProperties": false,
+      "properties": {
+        "feeTypeCd": {
+          "description": "Type de frais.",
+          "type": "string"
+        },
+        "feeRate": {
+          "description": "Taux des frais, en fraction.",
+          "type": "number",
+          "existingJavaType": "java.math.BigDecimal",
+          "minimum": 0
+        },
+        "feeAmt": {
+          "description": "Montant par période.",
+          "type": "number",
+          "existingJavaType": "java.math.BigDecimal",
+          "minimum": 0
+        },
+        "frequencyCd": {
+          "description": "Fréquence de facturation.",
+          "type": "string"
+        },
+        "effctvDt": {
+          "description": "Date d'effet des frais.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

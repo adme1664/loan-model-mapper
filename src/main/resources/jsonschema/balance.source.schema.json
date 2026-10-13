@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unbnk.example/schemas/balance.schema.json",
+  "title": "Balance",
+  "description": "Un enregistrement du fichier UNBNK_BALANCE_DG_AAAAMMJJ_DT_AAAAMMJJ.json (le fichier est un tableau de ces objets).",
+  "type": "object",
+  "javaType": "com.adme.learning.loan.model.mapper.agreement.entity.BalanceSource",
+  "additionalProperties": false,
+  "extends": {
+    "$ref": "base.schema.json"
+  },
+  "required": [
+    "agmtId",
+    "currency",
+    "fxRate",
+    "globalOriginalAgmtAmt",
+    "globalCurrentAgmtAmt",
+    "bankGrossAgmtAmt",
+    "bankNetAgmtAmt",
+    "participantAgmtAmt",
+    "ourSyndicationDetentionPct",
+    "previousAgmtBal"
+  ],
+  "properties": {
+    "agmtId": {
+      "description": "Renvoie vers le fichier AGREEMENT (clé).",
+      "type": "string"
+    },
+    "currency": {
+      "description": "Devise de l'agreement.",
+      "type": "string"
+    },
+    "fxRate": {
+      "description": "Taux de conversion vers la devise de la facility.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "exclusiveMinimum": 0
+    },
+    "globalOriginalAgmtAmt": {
+      "description": "Montant initial total.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "globalCurrentAgmtAmt": {
+      "description": "Montant total actuel.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "bankGrossAgmtAmt": {
+      "description": "Part brute de la banque.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "bankNetAgmtAmt": {
+      "description": "Part nette de la banque.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "participantAgmtAmt": {
+      "description": "Part cédée aux participants.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "previousAgmtBal": {
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0
+    },
+    "ourSyndicationDetentionPct": {
+      "description": "Pourcentage détenu par la banque.",
+      "type": "number",
+      "existingJavaType": "java.math.BigDecimal",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}
+

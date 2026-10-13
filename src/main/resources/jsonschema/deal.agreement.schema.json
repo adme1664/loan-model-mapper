@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unbnk.example/schemas/deal.agreement.schema.json",
+  "title": "Borrowing Agreement",
+  "description": "One borrowing agreement record from deal.agreement.schema.json; the source file contains an array of these records.",
+  "type": "object",
+  "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.DealSource",
+  "additionalProperties": false,
+  "extends": {
+    "$ref": "base.schema.json"
+  },
+  "properties": {
+    "op": {
+      "type": "string"
+    },
+    "agentId": {
+      "type": "string"
+    },
+    "businessDt": {
+      "type": "string"
+    },
+    "relationshipMgrId": {
+      "type": "string"
+    },
+    "classificationCd": {
+      "type": "string"
+    },
+    "batchId": {
+      "type": "string"
+    },
+    "changeTs": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "transit": {
+      "$ref": "#/definitions/transit"
+    },
+    "borrowingAgmtName": {
+      "type": "string"
+    },
+    "agentMemberIdNo": {
+      "type": "string"
+    },
+    "parties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/party"
+      }
+    },
+    "creditFacility": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/creditFacility"
+      }
+    },
+    "effctvDt": {
+      "type": "string",
+      "format": "date"
+    },
+    "borrowingAgmtId": {
+      "type": "string"
+    },
+    "nextReviewDt": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "definitions": {
+    "transit": {
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.Transit",
+      "additionalProperties": false,
+      "properties": {
+        "expenseTypeCd": {
+          "type": "string"
+        },
+        "departmentSubTypeDesc": {
+          "type": "string"
+        },
+        "expenseTypeDesc": {
+          "type": "string"
+        },
+        "departmentSubTypeCd": {
+          "type": "string"
+        }
+      }
+    },
+    "party": {
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.BorrowingParty",
+      "additionalProperties": false,
+      "properties": {
+        "industryCd": {
+          "type": "string"
+        },
+        "unbnkId": {
+          "type": "string"
+        },
+        "provinceCd": {
+          "type": "string"
+        },
+        "borrowerName": {
+          "type": "string"
+        },
+        "memberIdNo": {
+          "type": "string"
+        },
+        "primaryBorrowerInd": {
+          "type": "boolean"
+        }
+      }
+    },
+    "creditFacility": {
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.CreditFacility",
+      "additionalProperties": false,
+      "properties": {
+        "committedInd": {
+          "type": "boolean"
+        },
+        "SNCRatingTypeCd": {
+          "type": "string"
+        },
+        "riskRatingCd": {
+          "type": "string"
+        },
+        "directLenderInd": {
+          "type": "boolean"
+        },
+        "agreements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/agreementReference"
+          }
+        },
+        "statusCd": {
+          "type": "string"
+        },
+        "creditFacilityId": {
+          "type": "string"
+        },
+        "creditFacilityName": {
+          "type": "string"
+        },
+        "creditFacilityTypeCd": {
+          "type": "string"
+        },
+        "creditFacilityTypeDesc": {
+          "type": "string"
+        },
+        "parties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/party"
+          }
+        },
+        "limit": {
+          "$ref": "#/definitions/facilityLimit"
+        },
+        "effctvDt": {
+          "type": "string",
+          "format": "date"
+        },
+        "maturityDt": {
+          "type": "string",
+          "format": "date"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "lenderRoleCd": {
+          "type": "string"
+        },
+        "collateralTypeCd": {
+          "type": "string"
+        },
+        "expiryDt": {
+          "type": "string",
+          "format": "date"
+        },
+        "statusCdSrc": {
+          "type": "string"
+        },
+        "productCd": {
+          "type": "string"
+        },
+        "guaranteedInd": {
+          "type": "boolean"
+        }
+      }
+    },
+    "agreementReference": {
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.AgreementReference",
+      "additionalProperties": false,
+      "properties": {
+        "agmtId": {
+          "type": "string"
+        }
+      }
+    },
+    "facilityLimit": {
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.FacilityLimit",
+      "additionalProperties": false,
+      "properties": {
+        "borrowerLimit": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/borrowerLimit"
+          }
+        }
+      }
+    },
+    "borrowerLimit": {
+      "type": "object",
+      "javaType": "com.adme.learning.loan.model.mapper.creditfacility.entity.BorrowerLimit",
+      "additionalProperties": false,
+      "properties": {
+        "unbnkId": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "effctvDt": {
+          "type": "string",
+          "format": "date"
+        },
+        "memberIdNo": {
+          "type": "string"
+        },
+        "globalLimitAmt": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
