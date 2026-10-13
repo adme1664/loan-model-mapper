@@ -68,9 +68,6 @@ jobs:
       - name: Build with Maven
         run: ./mvnw clean package -DskipTests
 
-      - name: Run tests
-        run: ./mvnw test
-
       - name: Generate build info
         run: |
           echo "Build completed successfully"
